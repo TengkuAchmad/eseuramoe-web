@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
-class UsersController extends Controller
+class AdminController extends Controller
 {
     public function index(Request $request)
     {
@@ -17,7 +17,7 @@ class UsersController extends Controller
         $token = $request->session()->get('token');
     
         if (request()->ajax()) {
-            $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/get/all';
+            $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/get/admin/all';
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token
             ])->get($apiUrl);
@@ -39,7 +39,7 @@ class UsersController extends Controller
                                         <i class="fa fa-key"></i> Update Password
                                     </button>
                                 </div>';
-                        }    
+                        }                        
                         
                         return '
                         <div class="btn-group">
@@ -67,7 +67,7 @@ class UsersController extends Controller
                                 </div>
                             </div>
                         </div>';
-                    })   
+                    })                                  
                     ->editColumn('PhotoUrl_UD', function($item) {
                         $photoUrl = $item['PhotoUrl_UD'] === 'default' ? asset('storage/images/default-users.png') : $item['PhotoUrl_UD'];
                         return '<img src="'.$photoUrl.'" style="max-height: 50px; border-radius: 50%;">';
@@ -83,49 +83,48 @@ class UsersController extends Controller
             }
         }
 
-        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/get/all';
+        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/get/admin/all';
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token
         ])->get($apiUrl);
-        $cekUser = $response->json()['data'];
+        $cekAdmin = $response->json()['data'];
     
-        return view('dashboard.users.index', compact('dataUser','cekUser'));
+        return view('dashboard.admin.index', compact('dataUser','cekAdmin'));
     }
-    
+
     public function create(Request $request)
     {
         $data = $request->all();
-    
+
         if (empty($data['password'])) {
             $data['password'] = 'password';
         }
 
         $token = $request->session()->get('token');
-        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/register';
-    
+        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/register/admin';
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token
             ])->post($apiUrl, $data);
 
             if ($response->successful()) {
-                Log::info('User created', [
+                Log::info('Admin created', [
                     'user_email' => $data['email']
                 ]);
-                return redirect()->route('users.index')->with('message', 'User created successfully');
+                return redirect()->route('admin.index')->with('message', 'User created successfully');
             }
 
-            Log::error('Failed to create user', [
+            Log::error('Failed to create admin', [
                 'error' => $response->json(),
                 'status' => $response->status()
             ]);
-            return redirect()->route('users.index')->with('error', 'Failed to create user');
-
+            return redirect()->route('admin.index')->with('error', 'Failed to create user');
         } catch (\Exception $e) {
-            Log::error('User creation exception', [
+            Log::error('Admin creation exception', [
                 'message' => $e->getMessage()
             ]);
-            return redirect()->route('users.index')->with('error', 'System error occurred');
+            return redirect()->route('admin.index')->with('error', 'System error occurred');
         }
     }
 
@@ -156,7 +155,7 @@ class UsersController extends Controller
                 Log::info('User updated', [
                     'uuid' => $uuid
                 ]);
-                return redirect()->route('users.index')->with('message', 'User updated successfully');
+                return redirect()->route('admin.index')->with('message', 'User updated successfully');
             }
 
             Log::error('Failed to update user', [
@@ -164,13 +163,13 @@ class UsersController extends Controller
                 'status' => $response->status(),
                 'uuid' => $uuid
             ]);
-            return redirect()->route('users.index')->with('error', 'Failed to update user');
+            return redirect()->route('admin.index')->with('error', 'Failed to update user');
         } catch (\Exception $e) {
             Log::error('User update exception', [
                 'message' => $e->getMessage(),
                 'uuid' => $uuid
             ]);
-            return redirect()->route('users.index')->with('error', 'System error occurred');
+            return redirect()->route('admin.index')->with('error', 'System error occurred');
         }
     }
 
@@ -185,49 +184,39 @@ class UsersController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return redirect()->route('users.index')->with('error', $validator->errors()->first());
-        }
-        
+            return redirect()->route('admin.index')->with('error', $validator->errors()->first());
+        }        
 
         $token = $request->session()->get('token');
         $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/update/pass/' . $uuid;
 
         try {
-            Log::info('Sending password update request', [
-                'uuid' => $uuid,
-                'api_url' => $apiUrl
-            ]);
-
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $token
             ])->put($apiUrl, [
                 'password' => $request->password
             ]);
 
-            Log::info('Password update response', [
-                'status' => $response->status(),
-                'body' => $response->json()
-            ]);
-
             if ($response->successful()) {
-                return redirect()->route('users.index')->with('message', 'Password updated successfully');
+                cache()->forever('password_updated_' . $uuid, true);
+                return redirect()->route('admin.index')->with('message', 'Password updated successfully');
             }
 
-            return redirect()->route('users.index')->with('error', 'Failed to update password: ' . $response->json()['message']);
+            return redirect()->route('admin.index')->with('error', 'Failed to update password: ' . $response->json()['message']);
 
         } catch (\Exception $e) {
             Log::error('Password update exception', [
                 'message' => $e->getMessage(),
                 'uuid' => $uuid
             ]);
-            return redirect()->route('users.index')->with('error', 'System error occurred');
+            return redirect()->route('admin.index')->with('error', 'System error occurred');
         }
     }
 
     public function destroy($uuid)
     {
         $token = request()->session()->get('token');
-        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/delete/' . $uuid;
+        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/delete/admin/' . $uuid;
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token
@@ -243,7 +232,7 @@ class UsersController extends Controller
     public function deleteAll()
     {
         $token = request()->session()->get('token');
-        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . '/delete/all';
+        $apiUrl = env('APP_API') . '/' . env('USER_MANAGEMENT') . 'delete/admin/all';
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token

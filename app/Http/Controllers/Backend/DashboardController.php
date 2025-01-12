@@ -14,6 +14,12 @@ class DashboardController extends Controller
         $message = $request->session()->get('message');
         $token = $request->session()->get('token');
 
+        if (cache()->has('password_updated_' . $dataUser['id'])) {
+            cache()->forget('password_updated_' . $dataUser['id']);
+            $request->session()->flush();
+            return redirect()->route('login')->with('warning', 'Your password has been updated by admin. Please login again.');
+        }
+
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token
         ])->get(env('APP_API') . '/' . env('DATA_MANAGEMENT') . '/get/dashboard');
@@ -27,7 +33,7 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact(
             'dataUser',
-            'message',
+            'message', 
             'token',
             'resultCount',
             'modelCount',

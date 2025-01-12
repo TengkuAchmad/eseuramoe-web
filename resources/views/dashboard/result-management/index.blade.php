@@ -23,8 +23,8 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div class="d-flex align-items-center mb-3">
-                                <a href="{{ route('result.create') }}" class="btn btn-primary mx-1">
-                                    <i class="fa fa-plus"></i> Tambah Data
+                                <a href="{{ route('result.create') }}" class="btn btn-primary rounded-circle me-2">
+                                    <i class="fa fa-plus"></i>
                                 </a>
                             </div>
                             <table class="table table-hover" id="crudTable">

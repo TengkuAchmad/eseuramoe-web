@@ -31,11 +31,11 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div class="d-flex align-items-center mb-3">
-                                <button type="button" class="btn btn-primary rounded-circle me-2" data-bs-toggle="modal" data-bs-target="#createModal">
+                                <button type="button" class="btn btn-primary rounded-circle me-2" data-bs-toggle="modal" data-bs-target="#createModalAdmin">
                                     <i class="fa fa-plus"></i>
                                 </button>
                                 <button type="button" class="btn btn-danger mx-1" id="btnDeleteAll" 
-                                    @if(empty($cekUser) || $cekUser === null)
+                                    @if(empty($cekAdmin) || $cekAdmin === null)
                                         style="display: none;"
                                     @endif>
                                     <i class="fa fa-trash"></i> Delete All
@@ -64,14 +64,14 @@
 </section>
 
 <!-- Create Modal -->
-<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="createModalAdmin" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">New Users</h5>
+                <h5 class="modal-title">New Admin</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="createForm" action="{{ route('users.create') }}" method="POST" class="needs-validation" novalidate="">
+            <form id="createFormAdmin" action="{{ route('admin.create') }}" method="POST" class="needs-validation" novalidate="">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -148,7 +148,7 @@
                 <h5 class="modal-title">Update Password</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="updatePasswordForm" action="{{ route('users.update-password', ['uuid' => ':uuid']) }}" method="POST" class="needs-validation" novalidate="">
+            <form id="updatePasswordForm" action="{{ route('admin.update-password', ['uuid' => ':uuid']) }}" method="POST" class="needs-validation" novalidate="">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -163,12 +163,14 @@
                             <div class="form-group">
                                 <span class="text-danger">*</span><label class="form-label">New Password</label>
                                 <input type="password" name="password" class="form-control" required>
+                                <small class="text-muted">Min 6 characters</small>
                             </div>
                         </div>
                         <div class="col-12 mt-3">
                             <div class="form-group">
                                 <span class="text-danger">*</span><label class="form-label">Confirm New Password</label>
                                 <input type="password" name="password_confirmation" class="form-control" required>
+                                <small class="text-muted">Min 6 characters</small>
                             </div>
                         </div>
                     </div>
@@ -185,6 +187,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('addon-script')
@@ -197,7 +200,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('users.index') }}",
+                url: "{{ route('admin.index') }}",
                 type: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -237,13 +240,14 @@
         var name = $(this).data('name');
 
         $('#editForm #name').val(name);
-        $('#editForm').attr('action', '{{ route("users.update", ":uuid") }}'.replace(':uuid', uuid));
+        $('#editForm').attr('action', '{{ route("admin.update", ":uuid") }}'.replace(':uuid', uuid));
     });
 
     $(document).on('click', '#btn_update_password', function() {
         var uuid = $(this).data('uuid');
-        $('#updatePasswordForm').attr('action', '{{ route("users.update-password", ":uuid") }}'.replace(':uuid', uuid));
+        $('#updatePasswordForm').attr('action', '{{ route("admin.update-password", ":uuid") }}'.replace(':uuid', uuid));
     });
+
 
     $(document).on('click', '.btnDelete', function() {
         var uuid = $(this).data('uuid');
@@ -259,7 +263,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ route("users.delete", ":uuid") }}'.replace(':uuid', uuid),
+                    url: '{{ route("admin.delete", ":uuid") }}'.replace(':uuid', uuid),
                     type: 'DELETE',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
@@ -288,7 +292,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ route("users.delete.all") }}',
+                    url: '{{ route("admin.delete.all") }}',
                     type: 'DELETE',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
