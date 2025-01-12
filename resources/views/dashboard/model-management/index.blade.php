@@ -3,6 +3,15 @@
 @push('addon-style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<style>
+    .dropdown-toggle::after {
+        display: none;
+    }
+    .btn-default.btnDelete:hover {
+        background-color: #DC143C !important;
+        color: #fff !important;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -18,11 +27,11 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div class="d-flex align-items-center mb-3">
-                                <button type="button" class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#createModal">
-                                    <i class="fa fa-plus"></i>Tambah Model
+                                <button type="button" class="btn btn-primary rounded-circle me-2" data-bs-toggle="modal" data-bs-target="#createModal">
+                                    <i class="fa fa-plus"></i>
                                 </button>
                                 <button type="button" class="btn btn-danger mx-1" id="btnDeleteAll" 
-                                    @if(empty($models) || $models === null)
+                                    @if(empty($models) || $models === null || (is_numeric($models) && $models < 5))
                                         style="display: none;"
                                     @endif>
                                     <i class="fa fa-trash"></i> Delete All

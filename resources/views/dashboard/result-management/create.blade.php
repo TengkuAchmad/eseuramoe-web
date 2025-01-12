@@ -47,7 +47,7 @@
                                 <div class="col-md-2 col-2 col-lg-2 col-sm-2">
                                     <div class="form-group">
                                         <label>Umur</label><span class="text-danger">*</span>
-                                        <input type="number" class="form-control" name="Umur_SORI" required>
+                                        <input type="text" class="form-control" name="Umur_SORI" required>
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-2 col-lg-2 col-sm-2">
@@ -130,25 +130,25 @@
                             <div class="row">
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
-                                        <label>Min TRI</label><span class="text-danger">*</span>
+                                        <label>Min TRANSMITTAN</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Min_TRI" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
-                                        <label>Max TRI</label><span class="text-danger">*</span>
+                                        <label>Max TRANSMITTAN</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Max_TRI" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
-                                        <label>Min GRI</label><span class="text-danger">*</span>
+                                        <label>Min GLOMBANG</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Min_GRI" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
-                                        <label>Max GRI</label><span class="text-danger">*</span>
+                                        <label>Max GLOMBANG</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Max_GRI" required>
                                     </div>
                                 </div>
@@ -178,14 +178,14 @@
                                 <div class="col-md-5 col-5 col-lg-5 col-sm-5">
                                     <div class="form-group">
                                         <label>Longitude</label><span class="text-danger">*</span>
-                                        <input type="number" class="form-control" name="Longitude_SRI" placeholder="Longitude" required>
+                                        <input type="text" class="form-control" name="Longitude_SRI" placeholder="Longitude" required>
                                         <small class="fst-italic">Based on Google Maps</small>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-5 col-lg-5 col-sm-5">
                                     <div class="form-group">
                                         <label>Latitude</label><span class="text-danger">*</span>
-                                        <input type="number" class="form-control" name="Latitude_SRI" placeholder="Latitude" required>
+                                        <input type="text" class="form-control" name="Latitude_SRI" placeholder="Latitude" required>
                                         <small class="fst-italic">Based on Google Maps</small>
                                     </div>
                                 </div>

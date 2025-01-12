@@ -7,12 +7,19 @@
             <a href="{{ route('dashboard') }}"></a>
         </div>
         <ul class="sidebar-menu">
-            <li class="menu-header">MASTER DATA</li>
             <li class="{{ (request()->is('dashboard*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('dashboard') }}">
                     <i class="fas fa-fire"></i> <span>Dashboard</span>
                 </a>
             </li>
+            <li class="menu-header">MASTER DATA</li>
+            
+            <li class="{{ (request()->is('admin-management*')) ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.index') }}">
+                    <i class="fas fa-cogs"></i> <span>Admin Management</span>
+                </a>
+            </li>
+
 
             <li class="{{ (request()->is('user-management*')) ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('users.index') }}">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
 
 class ModelManagementController extends Controller
 {
@@ -28,13 +29,13 @@ class ModelManagementController extends Controller
                         return '
                         <div class="btn-group">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle mr-1 mb-1" type="button" data-bs-toggle="dropdown">
-                                    <i class="fa fa-2x fa-ellipsis-v"></i>
+                                <button class="btn dropdown-toggle mr-1 mb-1" type="button" data-bs-toggle="dropdown" style="padding: 0.1rem 0.4rem;">
+                                    <i class="fa fa-ellipsis-v" style="font-size: 1rem;"></i>
                                 </button>
-                                <div class="dropdown-menu bg-secondary">
+                                <div class="dropdown-menu">
                                     <div class="d-grid">
                                         <button type="button" class="btn btn-danger btnDelete" data-id="' . $item['UUID_MD'] . '">
-                                            Delete
+                                            <i class="fa fa-trash"></i> Delete
                                         </button>
                                     </div>
                                 </div>
@@ -42,7 +43,7 @@ class ModelManagementController extends Controller
                         </div>';
                     })
                     ->editColumn('Url_MD', function ($item) {
-                        return '<a href="'.$item['Url_MD'].'" target="_blank">Download Model</a>';
+                        return '<a href="'.$item['Url_MD'].'" target="_blank" style="color: #f05c26;" onmouseover="this.style.color=\'#d94d1f\'" onmouseout="this.style.color=\'#f05c26\'">Download Model</a>';
                     })
                     ->rawColumns(['action', 'Url_MD'])
                     ->make(true);
@@ -66,44 +67,55 @@ class ModelManagementController extends Controller
         $token = $request->session()->get('token');
         $apiUrl = env('APP_API') . '/' . env('MODEL_MANAGEMENT') . '/create';
 
-        if ($request->hasFile('files')) {
-            $modelPath = public_path('storage/model');
-            
-            if (!file_exists($modelPath)) {
-                mkdir($modelPath, 0777, true);
+        try {
+            if ($request->hasFile('files')) {
+                $modelPath = public_path('storage/model');
+                
+                if (!file_exists($modelPath)) {
+                    mkdir($modelPath, 0777, true);
+                }
+
+                $file = $request->file('files');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move($modelPath, $filename);
+                $filePath = $modelPath . '/' . $filename;
+
+                Log::info('File Upload Details', [
+                    'filename' => $filename,
+                    'path' => $filePath
+                ]);
+
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])->attach(
+                    'files',
+                    file_get_contents($filePath),
+                    $filename
+                )->post($apiUrl, [
+                    'name' => $request->name
+                ]);
+
+                if ($response->successful()) {
+                    Log::info('Model created successfully', [
+                        'name' => $request->name
+                    ]);
+                    return redirect()->route('model.index')->with('message', 'Model created successfully');
+                }
+
+                Log::error('Failed to create model', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+                return redirect()->route('model.index')->with('error', 'Failed to create model');
             }
 
-            $file = $request->file('files');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move($modelPath, $filename);
-            $filePath = $modelPath . '/' . $filename;
-
-            \Log::info('File Upload Details:', [
-                'filename' => $filename,
-                'path' => $filePath
+            return redirect()->route('model.index')->with('error', 'No file uploaded');
+        } catch (\Exception $e) {
+            Log::error('Model creation exception', [
+                'message' => $e->getMessage()
             ]);
-
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $token
-            ])->attach(
-                'files',
-                file_get_contents($filePath),
-                $filename
-            )->post($apiUrl, [
-                'name' => $request->name
-            ]);
-
-            if ($response->successful()) {
-                return redirect()->route('model.index')->with('success', 'Model created successfully.');
-            }
-
-            \Log::error('API Response Failed:', [
-                'status' => $response->status(),
-                'body' => $response->body()
-            ]);
+            return redirect()->route('model.index')->with('error', 'System error occurred');
         }
-
-        return redirect()->route('model.index')->with('error', 'Failed to create model.');
     }
 
     public function delete($id)
