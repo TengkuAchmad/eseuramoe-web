@@ -42,21 +42,18 @@ class ResultManagementController extends Controller
     public function store(Request $request)
     {
         $token = session()->get('token');
-
         
-        
-
         try {
             $validated = $request->validate([
                 'Title_RI' => 'required|string|max:255',
                 'Latitude_SRI' => 'required|numeric',
                 'Longitude_SRI' => 'required|numeric',
                 'Kabupaten_SRI' => 'required|string|max:255',
-                'Desa_SRI' => 'required|string|max:255',
                 'Kecamatan_SRI' => 'required|string|max:255',
                 'Umur_SORI' => 'required|string|max:50',
                 'Lereng_SORI' => 'required|string|max:50',
                 'Drainase_SORI' => 'required|string|max:255',
+                'Sampel_PRI' => 'required|string|max:255',
                 'Genangan_SORI' => 'required|string|max:50',
                 'Topografi_SORI' => 'required|string|max:255',
                 'BahayaErosi_SORI' => 'required|string|max:255',
@@ -77,13 +74,13 @@ class ResultManagementController extends Controller
                 'Longitude_SRI.required' => 'Longitude field is required',
                 'Longitude_SRI.numeric' => 'Longitude must be a number',
                 'Kabupaten_SRI.required' => 'Kabupaten field is required',
-                'Desa_SRI.required' => 'Desa field is required',
                 'Kecamatan_SRI.required' => 'Kecamatan field is required',
                 'ALB_PRI.numeric' => 'ALB must be a number',
                 'ALB_PRI.between' => 'ALB must be between 0 and 100',
                 'Rendemen_PRI.numeric' => 'Rendemen must be a number',
                 'Rendemen_PRI.between' => 'Rendemen must be between 0 and 100',
                 'Densitas_PRI.numeric' => 'Densitas must be a number',
+                'Sampel_PRI.required' => 'Sampel field is required',
                 'Max_TRI.gt' => 'Maximum transmittan must be greater than minimum transmittan',
                 'Max_GRI.gt' => 'Maximum gelombang must be greater than minimum gelombang'
             ]);
@@ -93,7 +90,6 @@ class ResultManagementController extends Controller
                 'latitude' => (float)$request->Latitude_SRI,
                 'longitude' => (float)$request->Longitude_SRI,
                 'kabupaten' => $request->Kabupaten_SRI,
-                'desa' => $request->Desa_SRI,
                 'kecamatan' => $request->Kecamatan_SRI,
                 'umur' => $request->Umur_SORI,
                 'lereng' => $request->Lereng_SORI,
@@ -107,6 +103,7 @@ class ResultManagementController extends Controller
                 'alb' => (float)$request->ALB_PRI,
                 'rendemen' => (float)$request->Rendemen_PRI,
                 'densitas' => (float)$request->Densitas_PRI,
+                'sampel' => $request->Sampel_PRI,
                 'min_transmittan' => (float)$request->Min_TRI,
                 'max_transmittan' => (float)$request->Max_TRI,
                 'min_gelombang' => (float)$request->Min_GRI,

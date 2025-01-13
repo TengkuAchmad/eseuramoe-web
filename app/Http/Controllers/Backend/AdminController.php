@@ -69,7 +69,9 @@ class AdminController extends Controller
                         </div>';
                     })                                  
                     ->editColumn('PhotoUrl_UD', function($item) {
-                        $photoUrl = $item['PhotoUrl_UD'] === 'default' ? asset('storage/images/default-users.png') : $item['PhotoUrl_UD'];
+                        $photoUrl = empty($item['PhotoUrl_UD']) || $item['PhotoUrl_UD'] === 'default'
+                            ? 'https://firebasestorage.googleapis.com/v0/b/prof-d1cc3.appspot.com/o/eseuramoe%2Favatars%2Fsilhouette.png?alt=media&token=35d79a20-d84f-49c2-960c-12e2b8f6cb29'
+                            : $item['PhotoUrl_UD'];
                         return '<img src="'.$photoUrl.'" style="max-height: 50px; border-radius: 50%;">';
                     })
                     ->editColumn('LoggedAt_UD', function($item) {

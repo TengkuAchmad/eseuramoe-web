@@ -100,6 +100,12 @@
                                         <input type="text" class="form-control" name="BatuanSin_SORI" required>
                                     </div>
                                 </div>
+                                <div class="col-md-3 col-3 col-lg-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label>Sampel</label><span class="text-danger">*</span>
+                                        <input type="text" class="form-control" name="Sampel_PRI" required>
+                                    </div>
+                                </div>
                             </div>
 
                             <h4 class="text-primary mt-4">Palm Information</h4>
@@ -157,32 +163,26 @@
                             <h4 class="text-primary">Location Information</h4>
                             <hr>
                             <div class="row">
-                                <div class="col-md-4 col-4 col-lg-4 col-sm-4">
-                                    <div class="form-group">
-                                        <label>Desa</label><span class="text-danger">*</span>
-                                        <input type="text" class="form-control" name="Desa_SRI" placeholder="Enter desa..." required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-4 col-lg-4 col-sm-4">
+                                <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
                                         <label>Kecamatan</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Kecamatan_SRI" placeholder="Enter kecamatan..." required>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-4 col-lg-4 col-sm-4">
+                                <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
                                         <label>Kabupaten</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Kabupaten_SRI" placeholder="Enter kabupaten..." required>
                                     </div>
                                 </div>
-                                <div class="col-md-5 col-5 col-lg-5 col-sm-5">
+                                <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
                                         <label>Longitude</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Longitude_SRI" placeholder="Longitude" required>
                                         <small class="fst-italic">Based on Google Maps</small>
                                     </div>
                                 </div>
-                                <div class="col-md-5 col-5 col-lg-5 col-sm-5">
+                                <div class="col-md-3 col-3 col-lg-3 col-sm-3">
                                     <div class="form-group">
                                         <label>Latitude</label><span class="text-danger">*</span>
                                         <input type="text" class="form-control" name="Latitude_SRI" placeholder="Latitude" required>
@@ -191,7 +191,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mt-4">
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3"></div>
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3"></div>
                                 <div class="col-md-3 col-3 col-lg-3 col-sm-3">

@@ -15,6 +15,10 @@
         background-color: #DC143C !important;
         color: #fff !important;
     }
+    .vertical-align-middle {
+        vertical-align: middle;
+    }
+
 </style>
 @endpush
 
@@ -97,7 +101,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal"><span class="me-2"><i class="fa fa-times"></i></span>Close</button>
-                    <button type="submit" class="btn btn-success"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
+                    <button type="submit" class="btn btn-primary"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
                 </div>
             </form>
         </div>
@@ -133,7 +137,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal"><span class="me-2"><i class="fa fa-times"></i></span>Close</button>
-                    <button type="submit" class="btn btn-success"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
+                    <button type="submit" class="btn btn-primary"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
                 </div>
             </form>
         </div>
@@ -177,7 +181,7 @@
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">
                         <span class="me-2"><i class="fa fa-times"></i></span>Close
                     </button>
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-primary">
                         <span class="me-2"><i class="fa fa-key"></i></span>Update Password
                     </button>
                 </div>
@@ -216,19 +220,52 @@
                 { 
                     data: 'PhotoUrl_UD', 
                     name: 'PhotoUrl_UD',
-                    orderable: false 
+                    orderable: false,
+                    render: function(data) {
+                        return data ? data : '-';
+                    },
                 },
-                { data: 'Name_UD', name: 'Name_UD' },
-                { data: 'Email_UD', name: 'Email_UD' },
-                { data: 'UpdatedAt_UD', name: 'UpdatedAt_UD' },
-                { data: 'LoggedAt_UD', name: 'LoggedAt_UD' },
+                { 
+                    data: 'Name_UD', 
+                    name: 'Name_UD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    },
+                    className: 'vertical-align-middle'
+                },
+                { 
+                    data: 'Email_UD', 
+                    name: 'Email_UD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    },
+                    className: 'vertical-align-middle'
+                },
+                { 
+                    data: 'UpdatedAt_UD', 
+                    name: 'UpdatedAt_UD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    },
+                    className: 'vertical-align-middle'
+                },
+                { 
+                    data: 'LoggedAt_UD', 
+                    name: 'LoggedAt_UD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    },
+                    className: 'vertical-align-middle'
+                },
                 { 
                     data: 'action', 
                     name: 'action',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    className: 'vertical-align-middle'
                 }
             ]
+
         });
     });
 
