@@ -31,29 +31,29 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Title</th>
-                                        <th>Kabupaten</th>
-                                        <th>Desa</th>
-                                        <th>Kecamatan</th>
-                                        <th>Longitude</th>
-                                        <th>Latitude</th>
-                                        <th>Umur</th>
-                                        <th>Lereng</th>
-                                        <th>Drainase</th>
-                                        <th>Genangan</th>
-                                        <th>Topografi</th>
-                                        <th>Bahaya Erosi</th>
-                                        <th>Batuan Per</th>
-                                        <th>Batuan Sin</th>
-                                        <th>Ketinggian</th>
+                                        <th>TITLE</th>
+                                        <th>KABUPATEN</th>
+                                        <th>KECAMATAN</th>
+                                        <th>LONGITUDE</th>
+                                        <th>LATITUDE</th>
+                                        <th>UMUR</th>
+                                        <th>LERENG</th>
+                                        <th>DRAINASE</th>
+                                        <th>GENANGAN</th>
+                                        <th>TOPOGRAFI</th>
+                                        <th>BAHAYA EROSI</th>
+                                        <th>BATUAN PER</th>
+                                        <th>BATUAN SIN</th>
+                                        <th>KETINGGIAN</th>
+                                        <th>SAMPEL</th>
                                         <th>ALB</th>
-                                        <th>Rendemen</th>
-                                        <th>Densitas</th>
-                                        <th>Min TRI</th>
-                                        <th>Max TRI</th>
-                                        <th>Min GRI</th>
-                                        <th>Max GRI</th>
-                                        <th>Created At</th>
+                                        <th>RENDEMEN</th>
+                                        <th>DENSITAS</th>
+                                        <th>MIN TRI</th>
+                                        <th>MAX TRI</th>
+                                        <th>MIN GRI</th>
+                                        <th>MAX GRI</th>
+                                        <th>CREATED AT</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -79,35 +79,50 @@
         scrollX: true,
         ajax: "{{ route('result.index') }}",
         columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'Title_RI', name: 'Title_RI', render: data => data || '-' },
             { 
-                data: 'DT_RowIndex', 
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
+                data: 'SocialResultIndex', 
+                name: 'SocialResultIndex.Kabupaten_SRI', 
+                render: data => (data && data[0] && data[0].Kabupaten_SRI) || '-' 
             },
-            { data: 'Title_RI', name: 'Title_RI' },
-            { data: 'SocialResultIndex.Kabupaten_SRI', name: 'SocialResultIndex.Kabupaten_SRI' },
-            { data: 'SocialResultIndex.Desa_SRI', name: 'SocialResultIndex.Desa_SRI' },
-            { data: 'SocialResultIndex.Kecamatan_SRI', name: 'SocialResultIndex.Kecamatan_SRI' },
-            { data: 'SocialResultIndex.Longitude_SRI', name: 'SocialResultIndex.Longitude_SRI' },
-            { data: 'SocialResultIndex.Latitude_SRI', name: 'SocialResultIndex.Latitude_SRI' },
-            { data: 'SoilResultIndex.Umur_SORI', name: 'SoilResultIndex.Umur_SORI' },
-            { data: 'SoilResultIndex.Lereng_SORI', name: 'SoilResultIndex.Lereng_SORI' },
-            { data: 'SoilResultIndex.Drainase_SORI', name: 'SoilResultIndex.Drainase_SORI' },
-            { data: 'SoilResultIndex.Genangan_SORI', name: 'SoilResultIndex.Genangan_SORI' },
-            { data: 'SoilResultIndex.Topografi_SORI', name: 'SoilResultIndex.Topografi_SORI' },
-            { data: 'SoilResultIndex.BahayaErosi_SORI', name: 'SoilResultIndex.BahayaErosi_SORI' },
-            { data: 'SoilResultIndex.BatuanPer_SORI', name: 'SoilResultIndex.BatuanPer_SORI' },
-            { data: 'SoilResultIndex.BatuanSin_SORI', name: 'SoilResultIndex.BatuanSin_SORI' },
-            { data: 'SoilResultIndex.Ketinggian_SORI', name: 'SoilResultIndex.Ketinggian_SORI' },
-            { data: 'PalmResultIndex.ALB_PRI', name: 'PalmResultIndex.ALB_PRI' },
-            { data: 'PalmResultIndex.Rendemen_PRI', name: 'PalmResultIndex.Rendemen_PRI' },
-            { data: 'PalmResultIndex.Densitas_PRI', name: 'PalmResultIndex.Densitas_PRI' },
-            { data: 'TransmittanResultIndex.Min_TRI', name: 'TransmittanResultIndex.Min_TRI' },
-            { data: 'TransmittanResultIndex.Max_TRI', name: 'TransmittanResultIndex.Max_TRI' },
-            { data: 'GelombangResultIndex.Min_GRI', name: 'GelombangResultIndex.Min_GRI' },
-            { data: 'GelombangResultIndex.Max_GRI', name: 'GelombangResultIndex.Max_GRI' },
-            { data: 'CreatedAt_RI', name: 'CreatedAt_RI' },
+            { 
+                data: 'SocialResultIndex', 
+                name: 'SocialResultIndex.Kecamatan_SRI', 
+                render: data => (data && data[0] && data[0].Kecamatan_SRI) || '-' 
+            },
+            { 
+                data: 'SocialResultIndex', 
+                name: 'SocialResultIndex.Longitude_SRI', 
+                render: data => (data && data[0] && data[0].Longitude_SRI) || '-' 
+            },
+            { 
+                data: 'SocialResultIndex', 
+                name: 'SocialResultIndex.Latitude_SRI', 
+                render: data => (data && data[0] && data[0].Latitude_SRI) || '-' 
+            },
+            { 
+                data: 'SocialResultIndex', 
+                name: 'SocialResultIndex.Umur_SRI', 
+                render: data => (data && data[0] && data[0].Umur_SRI) || '-' 
+            },
+            { data: 'SoilResultIndex.Lereng_SORI', name: 'SoilResultIndex.Lereng_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.Drainase_SORI', name: 'SoilResultIndex.Drainase_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.Genangan_SORI', name: 'SoilResultIndex.Genangan_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.Topografi_SORI', name: 'SoilResultIndex.Topografi_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.BahayaErosi_SORI', name: 'SoilResultIndex.BahayaErosi_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.BatuanPer_SORI', name: 'SoilResultIndex.BatuanPer_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.BatuanSin_SORI', name: 'SoilResultIndex.BatuanSin_SORI', render: data => data || '-' },
+            { data: 'SoilResultIndex.Ketinggian_SORI', name: 'SoilResultIndex.Ketinggian_SORI', render: data => data || '-' },
+            { data: 'PalmResultIndex.ALB_PRI', name: 'PalmResultIndex.ALB_PRI', render: data => data || '-' },
+            { data: 'PalmResultIndex.Rendemen_PRI', name: 'PalmResultIndex.Rendemen_PRI', render: data => data || '-' },
+            { data: 'PalmResultIndex.Densitas_PRI', name: 'PalmResultIndex.Densitas_PRI', render: data => data || '-' },
+            { data: 'PalmResultIndex.Sampel_PRI', name: 'PalmResultIndex.Sampel_PRI', render: data => data || '-' },
+            { data: 'TransmittanResultIndex.Min_TRI', name: 'TransmittanResultIndex.Min_TRI', render: data => data || '-' },
+            { data: 'TransmittanResultIndex.Max_TRI', name: 'TransmittanResultIndex.Max_TRI', render: data => data || '-' },
+            { data: 'GelombangResultIndex.Min_GRI', name: 'GelombangResultIndex.Min_GRI', render: data => data || '-' },
+            { data: 'GelombangResultIndex.Max_GRI', name: 'GelombangResultIndex.Max_GRI', render: data => data || '-' },
+            { data: 'CreatedAt_RI', name: 'CreatedAt_RI', render: data => data || '-' }
         ]
     });
 });

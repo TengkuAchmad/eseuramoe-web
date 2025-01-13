@@ -51,15 +51,7 @@ class ModelManagementController extends Controller
 
             return response()->json(['error' => 'Unable to fetch data'], 500);
         }
-
-        $apiUrl = env('APP_API') . '/' . env('MODEL_MANAGEMENT') . '/get/all';
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token
-        ])->get($apiUrl);
-
-        $models = $response->json()['data'] ?? [];
-
-        return view('dashboard.model-management.index', compact('dataUser', 'models'));
+        return view('dashboard.model-management.index', compact('dataUser'));
     }
 
     public function create(Request $request)
@@ -69,30 +61,23 @@ class ModelManagementController extends Controller
 
         try {
             if ($request->hasFile('files')) {
-                $modelPath = public_path('storage/model');
-                
-                if (!file_exists($modelPath)) {
-                    mkdir($modelPath, 0777, true);
-                }
-
                 $file = $request->file('files');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move($modelPath, $filename);
-                $filePath = $modelPath . '/' . $filename;
 
                 Log::info('File Upload Details', [
                     'filename' => $filename,
-                    'path' => $filePath
+                    'type_md' => $request->type
                 ]);
 
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $token
                 ])->attach(
                     'files',
-                    file_get_contents($filePath),
+                    file_get_contents($file),  
                     $filename
                 )->post($apiUrl, [
-                    'name' => $request->name
+                    'name' => $request->name,
+                    'type' => $request->type
                 ]);
 
                 if ($response->successful()) {
@@ -122,16 +107,19 @@ class ModelManagementController extends Controller
     {
         $token = session()->get('token');
         $apiUrl = env('APP_API') . '/' . env('MODEL_MANAGEMENT') . '/delete/' . $id;
-        
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token
-        ])->delete($apiUrl);
 
-        if ($response->successful()) {
-            return response()->json(['success' => true]);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])->delete($apiUrl);
+
+            if ($response->successful()) {
+                return response()->json(['success' => true]);
+            }
+
+            return response()->json(['message' => 'Model is currently being used and cannot be deleted.'], 400);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Model is currently being used and cannot be deleted.'], 500);
         }
-        
-        return response()->json(['success' => false]);
     }
-
 }

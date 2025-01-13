@@ -11,6 +11,43 @@
         background-color: #DC143C !important;
         color: #fff !important;
     }
+    #Type_MD {
+        width: 100%;
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        transition: border-color 0.3s, box-shadow 0.3s ease-in-out;
+    }
+
+    #Type_MD:hover {
+        border-color: #f05c26;
+        box-shadow: 0 0 5px rgba(240, 92, 38, 0.6);
+    }
+
+    #Type_MD:focus {
+        border-color: #f05c26;
+        box-shadow: 0 0 8px rgba(240, 92, 38, 0.6);
+        outline: none;
+    }
+
+    #Type_MD option {
+        padding: 10px;
+    }
+
+    #Type_MD option:hover {
+        background-color: #f05c26 !important;
+        color: white !important;
+        transition: background-color 0.3s ease !important;
+    }
+
+    .badge-custom {
+        font-size: 0.7rem;
+        font-weight: 500;
+        padding: 0.4em 0.8em;
+        border-radius: 0.25rem;
+        text-transform: capitalize;
+    }
 </style>
 @endpush
 
@@ -30,20 +67,15 @@
                                 <button type="button" class="btn btn-primary rounded-circle me-2" data-bs-toggle="modal" data-bs-target="#createModal">
                                     <i class="fa fa-plus"></i>
                                 </button>
-                                <button type="button" class="btn btn-danger mx-1" id="btnDeleteAll" 
-                                    @if(empty($models) || $models === null || (is_numeric($models) && $models < 5))
-                                        style="display: none;"
-                                    @endif>
-                                    <i class="fa fa-trash"></i> Delete All
-                                </button>
                             </div>
                             <table class="table table-hover" id="crudTable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
+                                        <th>NAME</th>
                                         <th>URL</th>
-                                        <th>Action</th>
+                                        <th>TYPE</th>
+                                        <th>ACTION</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -80,11 +112,21 @@
                                 <input type="file" name="files" id="files" class="form-control" required>
                             </div>
                         </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <span class="text-danger">*</span><label class="form-label">Type</label>
+                                <select name="type" id="Type_MD" class="form-control" required>
+                                    <option value="" disabled selected>--Pilih--</option>
+                                    <option value="SCAN_TEST">SCAN_TEST</option>
+                                    <option value="LAB_TEST">LAB_TEST</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal"><span class="me-2"><i class="fa fa-times"></i></span>Close</button>
-                    <button type="submit" class="btn btn-success"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
+                    <button type="submit" class="btn btn-primary"><span class="me-2"><i class="fa fa-save"></i></span>Save</button>
                 </div>
             </form>
         </div>
@@ -118,8 +160,28 @@
                     orderable: false,
                     searchable: false
                 },
-                { data: 'Name_MD', name: 'Name_MD' },
-                { data: 'Url_MD', name: 'Url_MD' },
+                { 
+                    data: 'Name_MD', 
+                    name: 'Name_MD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    }
+                },
+                { 
+                    data: 'Url_MD', 
+                    name: 'Url_MD',
+                    render: function(data) {
+                        return data ? data : '-';
+                    }
+                },
+                {
+                    data: 'Type_MD',
+                    name: 'Type_MD',
+                    render: function(data) {
+                        let badgeClass = (data === 'SCAN_TEST') ? 'badge-primary' : 'badge-dark';
+                        return `<span class="badge ${badgeClass} badge-custom">${data}</span>`;
+                    }
+                },
                 { 
                     data: 'action', 
                     name: 'action',
@@ -153,15 +215,17 @@
                         if (response.success) {
                             $('#crudTable').DataTable().ajax.reload();
                             Swal.fire('Deleted!', 'Model has been deleted.', 'success');
+                        } else {
+                            Swal.fire('Warning!', response.message || 'Model is currently being used and cannot be deleted.', 'warning');
                         }
                     },
-                    error: function() {
-                        Swal.fire('Error!', 'Failed to delete model.', 'error');
+                    error: function(xhr, status, error) {
+                        const errorMessage = xhr.responseJSON?.message || 'Model is currently being used and cannot be deleted.';
+                        Swal.fire('Warning!', errorMessage, 'warning');
                     }
                 });
             }
         });
     });
-
 </script>
 @endpush

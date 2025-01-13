@@ -39,6 +39,7 @@ Route::middleware([\App\Http\Middleware\IsSession::class])->group(function () {
         Route::get('/', [ModelManagementController::class, 'index'])->name('index');
         Route::post('/create', [ModelManagementController::class, 'create'])->name('create');
         Route::delete('/delete/{uuid}', [ModelManagementController::class, 'delete'])->name('delete');
+        Route::delete('/model/delete/all', [ModelManagementController::class, 'deleteAll'])->name('delete.all');
     });
 
     Route::prefix('result-management')->as('result.')->group(function () {
